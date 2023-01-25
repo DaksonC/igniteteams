@@ -1,6 +1,7 @@
 import { Header } from '@components/Header';
-import * as S from './styles';
+import { GroupCard } from '@components/GroupCard';
 import { Highlight } from '@components/Highlight';
+import * as S from './styles';
 
 export function Groups() {
   return (
@@ -10,6 +11,7 @@ export function Groups() {
         title="Grupos"
         subtitle="Aqui você encontra os grupos que você participa"
       />
+      <GroupCard title="Grupo 1" />
     </S.Container>
   );
 }
