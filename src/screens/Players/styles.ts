@@ -7,3 +7,13 @@ export const Container = styled.View`
     background-color: ${theme.COLORS.GRAY_600};
   `}
 `;
+
+export const Form = styled.View`
+  ${({ theme }) => css`
+    width: 100%;
+    border-radius: 6px;
+    flex-direction: row;
+    justify-content: center;
+    background-color: ${theme.COLORS.GRAY_700};
+  `}
+`;
