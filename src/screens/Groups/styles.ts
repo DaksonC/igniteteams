@@ -4,9 +4,6 @@ export const Container = styled.View`
   ${({ theme }) => css`
     flex: 1;
     padding: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     background-color: ${theme.COLORS.GRAY_600};
   `}
 `;
