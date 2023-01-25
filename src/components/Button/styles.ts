@@ -15,7 +15,10 @@ export const Container = styled(TouchableOpacity) <Props>`
     border-radius: 6px;
     align-items: center;
     justify-content: center;
-    background-color: ${type === 'PRIMARY' ? theme.COLORS.GREEN_700 : theme.COLORS.RED_DARK};
+    background-color: ${type === 'PRIMARY'
+      ? theme.COLORS.GREEN_700
+      : theme.COLORS.RED_DARK
+    };
   `}
 `;
 
