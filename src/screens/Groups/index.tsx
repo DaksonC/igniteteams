@@ -6,6 +6,7 @@ import { GroupCard } from '@components/GroupCard';
 import { Highlight } from '@components/Highlight';
 import { ListEmpty } from '@components/ListEmpty';
 import * as S from './styles';
+import { Button } from '@components/Button';
 
 
 export function Groups() {
@@ -30,6 +31,10 @@ export function Groups() {
         ListEmptyComponent={
           <ListEmpty message="Você não está em nenhum grupo" />
         }
+      />
+      <Button
+        title="Criar grupo"
+        type="PRIMARY"
       />
     </S.Container>
   );
