@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FlatList } from 'react-native';
+import { Alert, FlatList } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 
 import { Input } from '@components/Input';
@@ -12,6 +12,9 @@ import { ButtonIcon } from '@components/ButtonIcon';
 import { PlayerCard } from '@components/PlayerCard';
 
 import * as S from './styles';
+import { AppError } from '@utils/AppError';
+import { playerAddByGroup } from '@storage/player/playerAddByGroup';
+import { playersGetByGroup } from '@storage/player/playersGetByGroup';
 
 type RouteParams = {
   group: string;
@@ -19,10 +22,36 @@ type RouteParams = {
 
 export function Players() {
   const [team, setTeam] = useState('');
-  const [players, setPlayers] = useState([])
+  const [players, setPlayers] = useState([]);
+  const [newPlayerName, setNewPlayerName] = useState('');
 
   const routes = useRoute();
   const { group } = routes.params as RouteParams;
+
+  async function handleAddPlayer() {
+    if (newPlayerName.trim().length === 0) {
+      return Alert.alert('Novo Jogador', 'Me diz o nome do jogador 😥');
+    }
+
+    const newPlayer = {
+      name: newPlayerName,
+      team,
+    }
+
+    try {
+      await playerAddByGroup(newPlayer, group);
+      const players = await playersGetByGroup(group);
+      console.log(players);
+    } catch (error) {
+      if (error instanceof AppError) {
+        Alert.alert('Novo Jogador', error.message);
+      } else {
+        Alert.alert('Novo Jogador', 'Não foi possível adicionar o jogador 😥');
+      }
+    }
+  }
+
+
 
   return (
     <S.Container>
@@ -35,8 +64,12 @@ export function Players() {
         <Input
           placeholder="Nome da pessoa"
           autoCorrect={false}
+          onChangeText={setNewPlayerName}
         />
-        <ButtonIcon icon="add" />
+        <ButtonIcon
+          icon="add"
+          onPress={handleAddPlayer}
+        />
       </S.Form>
       <S.HeaderList>
         <FlatList
@@ -81,3 +114,5 @@ export function Players() {
     </S.Container>
   );
 }
+
+
