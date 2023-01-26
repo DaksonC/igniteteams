@@ -4,14 +4,13 @@ import {
   Roboto_400Regular,
   Roboto_700Bold,
 } from '@expo-google-fonts/roboto';
+import { StatusBar } from 'react-native';
 
 import theme from './src/theme';
-import { StatusBar } from 'react-native';
+import { Routes } from '@routes/index';
 import { Loading } from '@components/Loading';
 
-import { Groups } from '@screens/Groups';
-import { NewGroup } from '@screens/NewGroup';
-import { Players } from '@screens/Players';
+
 
 
 export default function App() {
@@ -27,9 +26,7 @@ export default function App() {
         backgroundColor="transparent"
         translucent
       />
-      {/* {fontsLoaded ? <Groups /> : <Loading />} */}
-      {/* {fontsLoaded ? <NewGroup /> : <Loading />} */}
-      {fontsLoaded ? <Players /> : <Loading />}
+      {fontsLoaded ? <Routes /> : <Loading />}
     </ThemeProvider>
   );
 }
