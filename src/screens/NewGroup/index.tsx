@@ -1,15 +1,20 @@
-import { Header } from '@components/Header';
-import { Highlight } from '@components/Highlight';
-import { Button } from '@components/Button';
-import { Input } from '@components/Input';
-import * as S from './styles';
+import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
+import { Input } from '@components/Input';
+import { Button } from '@components/Button';
+import { Header } from '@components/Header';
+import { Highlight } from '@components/Highlight';
+
+import * as S from './styles';
+
 export function NewGroup() {
+  const [group, setGroup] = useState('');
+
   const navigation = useNavigation();
 
   function handleNew() {
-    navigation.navigate('players', { group: 'Time 1' });
+    navigation.navigate('players', { group: group });
   }
 
   return (
@@ -24,6 +29,7 @@ export function NewGroup() {
         <Input
           style={{ marginBottom: 20 }}
           placeholder="Nome do grupo"
+          onChangeText={setGroup}
         />
         <Button
           title="Criar grupo"
