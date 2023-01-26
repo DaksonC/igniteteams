@@ -28,14 +28,12 @@ export function Groups() {
           />
         )}
         contentContainerStyle={groups.length === 0 && { flex: 1 }}
-        ListEmptyComponent={
+        ListEmptyComponent={() => (
           <ListEmpty message="Você não está em nenhum grupo" />
-        }
+        )}
+        showsVerticalScrollIndicator={false}
       />
-      <Button
-        title="Criar grupo"
-        type="PRIMARY"
-      />
+      <Button title="Criar grupo" />
     </S.Container>
   );
 }

@@ -1,15 +1,20 @@
+import { useState } from 'react';
+import { FlatList } from 'react-native';
+
 import { Input } from '@components/Input';
 import { Filter } from '@components/Filter';
 import { Header } from '@components/Header';
+import { Button } from '@components/Button';
 import { Highlight } from '@components/Highlight';
+import { ListEmpty } from '@components/ListEmpty';
 import { ButtonIcon } from '@components/ButtonIcon';
+import { PlayerCard } from '@components/PlayerCard';
+
 import * as S from './styles';
-import { FlatList } from 'react-native';
-import { useState } from 'react';
 
 export function Players() {
   const [team, setTeam] = useState('Time 1');
-  const [player, setPlayer] = useState(['Dakson', 'Vini', 'Rafael'])
+  const [players, setPlayers] = useState(['Dakson', 'Vini', 'Rafael'])
 
   return (
     <S.Container>
@@ -38,8 +43,33 @@ export function Players() {
           )}
           horizontal
         />
-        <S.NumberOfPlayers>{player.length}</S.NumberOfPlayers>
+        <S.NumberOfPlayer>{players.length}</S.NumberOfPlayer>
       </S.HeaderList>
+      <FlatList
+        data={players}
+        keyExtractor={item => item}
+        renderItem={({ item }) => (
+          <PlayerCard
+            name={item}
+            onRemove={() => setPlayers(players.filter(player => player !== item))}
+          />
+        )}
+        ListEmptyComponent={() => (
+          <ListEmpty
+            message='Nenhum jogador encontrado'
+          />
+        )}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={[
+          { paddingBottom: 100 },
+          players.length === 0 && { flex: 1 }
+        ]}
+      />
+      <Button
+        title="Remover turma"
+        type="SECONDARY"
+        onPress={() => { }}
+      />
     </S.Container>
   );
 }
