@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Alert, FlatList } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 
@@ -11,18 +11,20 @@ import { ListEmpty } from '@components/ListEmpty';
 import { ButtonIcon } from '@components/ButtonIcon';
 import { PlayerCard } from '@components/PlayerCard';
 
-import * as S from './styles';
 import { AppError } from '@utils/AppError';
 import { playerAddByGroup } from '@storage/player/playerAddByGroup';
-import { playersGetByGroup } from '@storage/player/playersGetByGroup';
+import { PlayerStorageDTO } from '@storage/player/playerStorageDTO';
+import { playersGetByGroupsTeam } from '@storage/player/playersGetByGroupsAndTeam';
+
+import * as S from './styles';
 
 type RouteParams = {
   group: string;
 }
 
 export function Players() {
-  const [team, setTeam] = useState('');
-  const [players, setPlayers] = useState([]);
+  const [team, setTeam] = useState('Time A');
+  const [players, setPlayers] = useState<PlayerStorageDTO[]>([]);
   const [newPlayerName, setNewPlayerName] = useState('');
 
   const routes = useRoute();
@@ -40,8 +42,8 @@ export function Players() {
 
     try {
       await playerAddByGroup(newPlayer, group);
-      const players = await playersGetByGroup(group);
-      console.log(players);
+      fetchPlayersByTeam();
+
     } catch (error) {
       if (error instanceof AppError) {
         Alert.alert('Novo Jogador', error.message);
@@ -51,7 +53,19 @@ export function Players() {
     }
   }
 
+  async function fetchPlayersByTeam() {
+    try {
+      const playersByTeam = await playersGetByGroupsTeam(group, team);
 
+      setPlayers(playersByTeam);
+    } catch (error) {
+      Alert.alert('Jogador', 'Não foi possível buscar os jogadores 😥');
+    }
+  }
+
+  useEffect(() => {
+    fetchPlayersByTeam();
+  }, [team]);
 
   return (
     <S.Container>
@@ -62,7 +76,7 @@ export function Players() {
       />
       <S.Form>
         <Input
-          placeholder="Nome da pessoa"
+          placeholder="Nome ddo jogador"
           autoCorrect={false}
           onChangeText={setNewPlayerName}
         />
@@ -73,7 +87,7 @@ export function Players() {
       </S.Form>
       <S.HeaderList>
         <FlatList
-          data={['Time 1', 'Time 2', 'Time 3']}
+          data={['Time A', 'Time B']}
           keyExtractor={item => item}
           renderItem={({ item }) => (
             <Filter
@@ -88,11 +102,11 @@ export function Players() {
       </S.HeaderList>
       <FlatList
         data={players}
-        keyExtractor={item => item}
+        keyExtractor={item => item.name}
         renderItem={({ item }) => (
           <PlayerCard
-            name={item}
-            onRemove={() => setPlayers(players.filter(player => player !== item))}
+            name={item.name}
+            onRemove={() => { }}
           />
         )}
         ListEmptyComponent={() => (
