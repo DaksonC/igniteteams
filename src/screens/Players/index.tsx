@@ -1,4 +1,4 @@
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useEffect, useRef, useState } from 'react';
 import { Alert, FlatList, TextInput } from 'react-native';
 
@@ -11,11 +11,13 @@ import { ListEmpty } from '@components/ListEmpty';
 import { ButtonIcon } from '@components/ButtonIcon';
 import { PlayerCard } from '@components/PlayerCard';
 
-import { AppError } from '@utils/AppError';
 import { playerAddByGroup } from '@storage/player/playerAddByGroup';
 import { PlayerStorageDTO } from '@storage/player/playerStorageDTO';
+import { groupRemoveByName } from '@storage/group/groupRemoveByName';
 import { playerRemuveByGroup } from '@storage/player/playerRemuveByGroup';
 import { playersGetByGroupsTeam } from '@storage/player/playersGetByGroupsAndTeam';
+
+import { AppError } from '@utils/AppError';
 
 import * as S from './styles';
 
@@ -25,8 +27,10 @@ type RouteParams = {
 
 export function Players() {
   const [team, setTeam] = useState('Time A');
-  const [players, setPlayers] = useState<PlayerStorageDTO[]>([]);
   const [newPlayerName, setNewPlayerName] = useState('');
+  const [players, setPlayers] = useState<PlayerStorageDTO[]>([]);
+
+  const navigation = useNavigation();
 
   const routes = useRoute();
   const { group } = routes.params as RouteParams;
@@ -76,6 +80,27 @@ export function Players() {
       console.log(error);
       Alert.alert('Remover Jogador', 'Não foi possível remover o jogador 😥');
     }
+  }
+
+  async function groupRevmove() {
+    try {
+      await groupRemoveByName(group);
+      navigation.navigate('groups');
+    } catch (error) {
+      console.log(error);
+      Alert.alert('Remover Jogador', 'Não foi possível remover o jogador 😥');
+    }
+  }
+
+  async function handleGroupRemove() {
+    Alert.alert(
+      'Remover Turma',
+      'Deseja remover a turma?',
+      [
+        { text: 'Não', style: 'cancel' },
+        { text: 'Sim', onPress: () => groupRevmove() },
+      ]
+    );
   }
 
   useEffect(() => {
@@ -142,14 +167,12 @@ export function Players() {
       <Button
         title="Remover turma"
         type="SECONDARY"
-        onPress={() => { }}
+        onPress={handleGroupRemove}
       />
     </S.Container>
   );
 }
 
 
-function playerRemoveByGroup(playerName: string, group: string) {
-  throw new Error('Function not implemented.');
-}
+
 
