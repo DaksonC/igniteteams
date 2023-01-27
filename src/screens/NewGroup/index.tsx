@@ -19,16 +19,16 @@ export function NewGroup() {
   async function handleNew() {
     try {
       if (group.trim().length === 0) {
-        return Alert.alert('Novo Grupo', 'Informe o nome do grupo');
+        return Alert.alert('Nova Turma', 'Informe o nome da turma');
       }
       await groupCreate(group);
       navigation.navigate('players', { group: group });
 
     } catch (error) {
       if (error instanceof AppError) {
-        Alert.alert('Novo Grupo', error.message);
+        Alert.alert('Nova Turma', error.message);
       } else {
-        Alert.alert('Novo Grupo', 'Erro ao criar grupo');
+        Alert.alert('Nova Turma', 'Erro ao criar turma');
       }
       console.log(error);
     }
@@ -40,16 +40,16 @@ export function NewGroup() {
       <S.Content>
         <S.Icon />
         <Highlight
-          title="Crie um grupo para jogar seus games favoritos com seus amigos"
-          subtitle="Você será o administrador do grupo"
+          title="Nova Turma"
+          subtitle="crie uma nova turma para adcionar as pessoas"
         />
         <Input
           style={{ marginBottom: 20 }}
-          placeholder="Nome do grupo"
+          placeholder="Nome da turma"
           onChangeText={setGroup}
         />
         <Button
-          title="Criar grupo"
+          title="Criar"
           onPress={handleNew}
         />
       </S.Content>

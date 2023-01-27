@@ -6,6 +6,7 @@ import { Input } from '@components/Input';
 import { Filter } from '@components/Filter';
 import { Header } from '@components/Header';
 import { Button } from '@components/Button';
+import { Loading } from '@components/Loading';
 import { Highlight } from '@components/Highlight';
 import { ListEmpty } from '@components/ListEmpty';
 import { ButtonIcon } from '@components/ButtonIcon';
@@ -27,6 +28,7 @@ type RouteParams = {
 
 export function Players() {
   const [team, setTeam] = useState('Time A');
+  const [isLoading, setIsLoading] = useState(true);
   const [newPlayerName, setNewPlayerName] = useState('');
   const [players, setPlayers] = useState<PlayerStorageDTO[]>([]);
 
@@ -62,11 +64,15 @@ export function Players() {
 
   async function fetchPlayersByTeam() {
     try {
+      setIsLoading(true);
+
       const playersByTeam = await playersGetByGroupsTeam(group, team);
 
       newPlayerNameInputRef.current?.blur();
       setNewPlayerName('');
       setPlayers(playersByTeam);
+
+      setIsLoading(false);
     } catch (error) {
       Alert.alert('Jogador', 'Não foi possível buscar os jogadores 😥');
     }
@@ -117,7 +123,7 @@ export function Players() {
       <S.Form>
         <Input
           value={newPlayerName}
-          placeholder="Nome ddo jogador"
+          placeholder="Nome do jogador"
           autoCorrect={false}
           onChangeText={setNewPlayerName}
           inputRef={newPlayerNameInputRef}
@@ -131,7 +137,7 @@ export function Players() {
       </S.Form>
       <S.HeaderList>
         <FlatList
-          data={['Time A', 'Time B']}
+          data={['front', 'back']}
           keyExtractor={item => item}
           renderItem={({ item }) => (
             <Filter
@@ -144,26 +150,29 @@ export function Players() {
         />
         <S.NumberOfPlayer>{players.length}</S.NumberOfPlayer>
       </S.HeaderList>
-      <FlatList
-        data={players}
-        keyExtractor={item => item.name}
-        renderItem={({ item }) => (
-          <PlayerCard
-            name={item.name}
-            onRemove={() => handlePlayerRemove(item.name)}
+      {
+        isLoading ? <Loading /> :
+          <FlatList
+            data={players}
+            keyExtractor={item => item.name}
+            renderItem={({ item }) => (
+              <PlayerCard
+                name={item.name}
+                onRemove={() => handlePlayerRemove(item.name)}
+              />
+            )}
+            ListEmptyComponent={() => (
+              <ListEmpty
+                message='Nenhum jogador encontrado'
+              />
+            )}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={[
+              { paddingBottom: 100 },
+              players.length === 0 && { flex: 1 }
+            ]}
           />
-        )}
-        ListEmptyComponent={() => (
-          <ListEmpty
-            message='Nenhum jogador encontrado'
-          />
-        )}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={[
-          { paddingBottom: 100 },
-          players.length === 0 && { flex: 1 }
-        ]}
-      />
+      }
       <Button
         title="Remover turma"
         type="SECONDARY"
