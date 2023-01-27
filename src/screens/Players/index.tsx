@@ -71,10 +71,10 @@ export function Players() {
       newPlayerNameInputRef.current?.blur();
       setNewPlayerName('');
       setPlayers(playersByTeam);
-
-      setIsLoading(false);
     } catch (error) {
       Alert.alert('Jogador', 'Não foi possível buscar os jogadores 😥');
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -123,7 +123,7 @@ export function Players() {
       <S.Form>
         <Input
           value={newPlayerName}
-          placeholder="Nome do jogador"
+          placeholder="Nome do participante"
           autoCorrect={false}
           onChangeText={setNewPlayerName}
           inputRef={newPlayerNameInputRef}

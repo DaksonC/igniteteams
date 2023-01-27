@@ -30,11 +30,11 @@ export function Groups() {
 
       const data = await groupsGetAll();
       setGroups(data);
-
-      setIsLoading(false);
     } catch (error) {
       console.log(error);
       Alert.alert('Turmas', 'Não foi possível buscar turmas 😥');
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -51,7 +51,7 @@ export function Groups() {
       <Header />
       <Highlight
         title="Turmas"
-        subtitle="Aqui você encontra a turma que você participa"
+        subtitle="jogue com a sua turma"
       />
       {
         isLoading ? <Loading /> :
@@ -72,7 +72,7 @@ export function Groups() {
           />
       }
       <Button
-        title="Criar turma"
+        title="Criar nova turma"
         onPress={handleNewGroup}
       />
     </S.Container>

@@ -41,7 +41,7 @@ export function NewGroup() {
         <S.Icon />
         <Highlight
           title="Nova Turma"
-          subtitle="crie uma nova turma para adcionar as pessoas"
+          subtitle="crie uma nova turma para adcionar pessoas"
         />
         <Input
           style={{ marginBottom: 20 }}
