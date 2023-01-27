@@ -47,6 +47,8 @@ export function NewGroup() {
           style={{ marginBottom: 20 }}
           placeholder="Nome da turma"
           onChangeText={setGroup}
+          onSubmitEditing={handleNew}
+          returnKeyType='done'
         />
         <Button
           title="Criar"
